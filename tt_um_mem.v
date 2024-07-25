@@ -1,7 +1,7 @@
 /*
- * tt_um_factory_test.v
+ * tt_um_mem.v
  *
- * Test user module
+ * Memory made of DFF
  *
  * Author: Sylvain Munaut <tnt@246tNt.com>
  */
@@ -34,7 +34,12 @@ module tt_um_mem (
   always @(*) begin
     if (~rst_n) begin
       adrforce = datin[11:0];
-      weforce = datin[0];
+    end
+  end
+
+  always @(*) begin
+    if (~rst_n) begin
+      weforce = datin[12];
     end
   end
 
@@ -51,4 +56,4 @@ module tt_um_mem (
   // avoid linter warning about unused pins:
   wire _unused_pins = ena;
 
-endmodule  // tt_um_factory_test
+endmodule  // tt_um_mem

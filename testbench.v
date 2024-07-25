@@ -5,8 +5,23 @@ module testbench;
 
   reg ck, rs, rw;
   reg [15:0] datin;
+  reg [2:0] adrin;
   wire [7:0] cntrloe;
   wire [15:0] datut;
+
+  assign mem0.\mem0.addr[0] = adrin[0];
+  assign mem0.\mem0.addr[1] = adrin[1];
+  assign mem0.\mem0.addr[2] = adrin[2];
+  assign mem0.\mem0.addr[3] = 0;
+  assign mem0.\mem0.addr[4] = 0;
+  assign mem0.\mem0.addr[5] = 0;
+  assign mem0.\mem0.addr[6] = 0;
+  assign mem0.\mem0.addr[7] = 0;
+  assign mem0.\mem0.addr[8] = 0;
+  assign mem0.\mem0.addr[9] = 0;
+  assign mem0.\mem0.addr[10] = 0;
+  assign mem0.\mem0.addr[11] = 0;
+  assign mem0.\mem0.we = rw;
 
   initial begin
     $display($time,"                 di do");
@@ -15,9 +30,10 @@ module testbench;
     ck = 1'b0; rs = 1'b1; datin = 0;
     #5 rs = 1'b0;
     #30 rs = 1'b1;
-    #50 mem0.adrforce = 3'h3; mem0.weforce = 0;
+    #50 adrin = 3'b111;
+    #10 rw = 0;
     #50 datin = 16'h1253;
-    #20 mem0.weforce = 1;
+    #20 rw = 1;
     #100 $finish;
   end 
 
