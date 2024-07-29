@@ -5,7 +5,7 @@ module testbench;
 
   reg ck, rs, rw;
   reg [15:0] datin;
-  reg [2:0] adrin;
+  reg [3:0] adrin;
   wire [7:0] cntrloe;
   wire [15:0] datut;
 
@@ -30,10 +30,10 @@ module testbench;
     ck = 1'b0; rs = 1'b1; datin = 0;
     #5 rs = 1'b0;
     #30 rs = 1'b1;
-    #50 adrin = 3'b111;
-    #10 rw = 0;
+    #50 adrin = 4'b0111;// mem0.adrforce = adrin;
+    #10 rw = 0;// mem0.weforce = rw;
     #50 datin = 16'h1253;
-    #20 rw = 1;
+    #20 rw = 1;// mem0.weforce = rw;
     #100 $finish;
   end 
 

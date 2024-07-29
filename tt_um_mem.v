@@ -3,7 +3,7 @@
  *
  * Memory made of DFF
  *
- * Author: Sylvain Munaut <tnt@246tNt.com>
+ * Author: Aloke Kumar Das <aloke.das@ieee.org>
  */
 
 `default_nettype none
@@ -43,7 +43,7 @@ module tt_um_mem (
     end
   end
 
-  mem8x16 mem0 (
+  mem16x16 mem0 (
     .clk(clk),
     .rst(~rst_n_i),
     .addr(adrforce),
