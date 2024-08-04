@@ -5,10 +5,12 @@ module testbench;
 
   reg ck, rs, rw;
   reg [15:0] datin;
-  reg [3:0] adrin;
+  reg [2:0] adrin;
   wire [7:0] cntrloe;
   wire [15:0] datut;
 
+
+`ifdef USE_POWER_PINS
   assign mem0.\mem0.addr[0] = adrin[0];
   assign mem0.\mem0.addr[1] = adrin[1];
   assign mem0.\mem0.addr[2] = adrin[2];
@@ -22,18 +24,24 @@ module testbench;
   assign mem0.\mem0.addr[10] = 0;
   assign mem0.\mem0.addr[11] = 0;
   assign mem0.\mem0.we = rw;
+`else
+  always @* begin
+    mem0.adrforce = adrin;
+    mem0.weforce = rw;
+  end
+`endif
 
   initial begin
-    $display($time,"                 di do");
-    $monitor($time," THE ANSWER IS = %h %h", datin, datut);
+    $display($time,"                 ad di  do  rw");
+    $monitor($time," THE ANSWER IS = %h %h %h %b", adrin, datin, datut, rw);
 
-    ck = 1'b0; rs = 1'b1; datin = 0;
+    ck = 1'b0; rs = 1'b1; datin = 0; adrin =0; rw = 0;
     #5 rs = 1'b0;
     #30 rs = 1'b1;
-    #50 adrin = 4'b0111;// mem0.adrforce = adrin;
-    #10 rw = 0;// mem0.weforce = rw;
+    #50 adrin = 4'b0111;
     #50 datin = 16'h1253;
-    #20 rw = 1;// mem0.weforce = rw;
+    #20 rw = 1;
+    #50 rw = 0;
     #100 $finish;
   end 
 

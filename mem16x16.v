@@ -1,11 +1,15 @@
 module mem16x16 (
-    input clk,
-    input rst,
-    input [11:0] addr,
-    input [15:0] din,
-    output reg [15:0] dout,
-    input cs,
-    input we
+`ifdef USE_POWER_PINS
+  inout vccd1,
+  inout vssd1,
+`endif
+  input clk,
+  input rst,
+  input cs,
+  input we,
+  input [11:0] addr,
+  input [15:0] din,
+  output reg [15:0] dout
 );
 
   wire [15:0] outbuf[0:15];

@@ -20,7 +20,7 @@ module tt_um_mem (
 );
 
   reg rst_n_i, weforce;
-  reg [11:0] adrforce;
+  reg [2:0] adrforce;
   wire [15:0] datin, datut;
 
   assign uio_oe = 8'hF0; // Lower nibble all input, Upper all output
@@ -43,7 +43,7 @@ module tt_um_mem (
     end
   end
 
-  mem16x16 mem0 (
+  mem8x16 mem0 (
     .clk(clk),
     .rst(~rst_n_i),
     .addr(adrforce),
