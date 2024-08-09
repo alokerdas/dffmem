@@ -8,6 +8,7 @@ module bootrom (
   input cs,
   input we,
   input [2:0] addr,
+  input [15:0] din,
   output reg [15:0] dout
 );
 
@@ -20,63 +21,64 @@ module bootrom (
   reg [15:0] outbuf6;
   reg [15:0] outbuf7;
   reg [15:0] dout_internal;
-  wire romclk;
+  wire romclk, clk7th;
 
   assign romclk = clk & 1'b0;
+  assign clk7th = clk & we & cs &(|addr);
   always @ (posedge romclk or posedge rst) begin
     if (rst) begin
       outbuf0 <= 16'hF200;
     end else begin
-      outbuf0 <= 0;
+      outbuf0 <= 16'h0000;
     end
   end
   always @ (posedge romclk or posedge rst) begin
     if (rst) begin
       outbuf1 <= 16'h4000;
     end else begin
-      outbuf1 <= 0;
+      outbuf1 <= 16'h0000;
     end
   end
   always @ (posedge romclk or posedge rst) begin
     if (rst) begin
       outbuf2 <= 16'hF800;
     end else begin
-      outbuf2 <= 0;
+      outbuf2 <= 16'h0000;
     end
   end
   always @ (posedge romclk or posedge rst) begin
     if (rst) begin
       outbuf3 <= 16'hF400;
     end else begin
-      outbuf3 <= 0;
+      outbuf3 <= 16'h0000;
     end
   end
   always @ (posedge romclk or posedge rst) begin
     if (rst) begin
-      outbuf4 <= 16'hB008;
+      outbuf4 <= 16'hB007;
     end else begin
-      outbuf4 <= 0;
+      outbuf4 <= 16'h0000;
     end
   end
   always @ (posedge romclk or posedge rst) begin
     if (rst) begin
-      outbuf5 <= 16'h4000;
+      outbuf5 <= 16'h6007;
     end else begin
-      outbuf5 <= 0;
+      outbuf5 <= 16'h0000;
     end
   end
   always @ (posedge romclk or posedge rst) begin
     if (rst) begin
       outbuf6 <= 16'h4000;
     end else begin
-      outbuf6 <= 0;
+      outbuf6 <= 16'h0000;
     end
   end
-  always @ (posedge romclk or posedge rst) begin
+  always @ (posedge clk7th or posedge rst) begin
     if (rst) begin
       outbuf7 <= 16'h0008;
     end else begin
-      outbuf7 <= 0;
+      outbuf7 <= din;
     end
   end
 
@@ -90,9 +92,9 @@ module bootrom (
       'd5: dout_internal = outbuf5;
       'd6: dout_internal = outbuf6;
       'd7: dout_internal = outbuf7;
-      default: dout_internal = 16'hzzzz;
     endcase
   end
+
   always_latch begin
     if (~we & cs) begin
       dout = dout_internal;

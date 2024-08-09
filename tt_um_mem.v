@@ -24,26 +24,26 @@ module tt_um_mem (
   wire [15:0] datin, datut;
 
   assign uio_oe = 8'hF0; // Lower nibble all input, Upper all output
-  assign datin = {ui_in, uio_in};
-  assign {uo_out, uio_out} = datut;
+  assign datin = {uio_in, ui_in};
+  assign {uio_out, uo_out} = datut;
 
   always @(posedge clk or negedge rst_n)
     if (~rst_n) rst_n_i <= 1'b0;
     else rst_n_i <= 1'b1;
 
-  always @(*) begin
+  always_latch begin
     if (~rst_n) begin
       adrforce = datin[11:0];
     end
   end
 
-  always @(*) begin
+  always_latch begin
     if (~rst_n) begin
       weforce = datin[12];
     end
   end
 
-  mem8x16 mem0 (
+  bootrom mem0 (
     .clk(clk),
     .rst(~rst_n_i),
     .addr(adrforce),
