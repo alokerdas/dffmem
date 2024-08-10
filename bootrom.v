@@ -76,7 +76,7 @@ module bootrom (
   end
   always @ (posedge clk7th or posedge rst) begin
     if (rst) begin
-      outbuf7 <= 16'h0008;
+      outbuf7 <= 16'h000F; // this is tricky, it tests bootrom, mem and spi
     end else begin
       outbuf7 <= din;
     end
